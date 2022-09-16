@@ -33,5 +33,13 @@
 	<select id="search" parameterType="java.util.HashMap" resultType="board">
 		select * from board_table where ${type} like concat('%', #{q}, '%') order by id desc
 	</select>
+	
+	<select id="pagingList" parameterType="java.util.HashMap" resultType="board">
+		select * from board_table where categoryId=#{categoryId} order by id desc limit #{start}, #{count}
+	</select>
+	
+	<select id="count" parameterType="Integer" resultType="Long">
+		select count(id) from board_table where categoryId=#{categoryId}
+	</select>
 </mapper>
 

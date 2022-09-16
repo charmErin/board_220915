@@ -31,16 +31,7 @@
 					MemberB
 				</span>
 			</a>
-			<form class="col-md-auto" action="/board/search" method="get">
-				<div class="input-group">
-					<select class="form-select" name="searchType">
-						<option value="boardTitle">제목</option>
-						<option value="boardWriter">작성자</option>
-						<option value="boardContetns">내용</option>
-					</select>
-					<input class="form-control col-2" type="text" name="q" placeholder="검색" aria-label="Search">
-				</div>
-			</form>
+			
 			<div>
 				<c:choose>
 					<c:when test="${sessionScope.id == null}">

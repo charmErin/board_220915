@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.its.board.dto.BoardDTO;
 import com.its.board.dto.CommentDTO;
+import com.its.board.dto.PageDTO;
 import com.its.board.service.BoardService;
 import com.its.board.service.CommentService;
 
@@ -28,11 +29,13 @@ public class BoardController {
 	private final BoardService boardService;
 	private final CommentService commentService;
 	
+	// 글 저장 페이지 요청
 	@GetMapping("/save-form")
 	public String saveForm() {
 		return "board/save";
 	}
 	
+	// 글 저장 처리
 	@PostMapping("/save")
 	public String save(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
 		int result = boardService.save(boardDTO);
@@ -44,15 +47,31 @@ public class BoardController {
 		}
 	}
 	
+	// 글 목록
+//	@GetMapping("/{categoryId}")
+//	public String findAll(@PathVariable int categoryId, Model model) {
+//		model.addAttribute("boardList", boardService.findAll(categoryId));
+//		model.addAttribute("category", categoryId);
+//		return "board/list";
+//	}
+	
+	// 글 페이징 목록
 	@GetMapping("/{categoryId}")
-	public String findAll(@PathVariable int categoryId, Model model) {
-		model.addAttribute("boardList", boardService.findAll(categoryId));
+	public String paging(@RequestParam(value="page", required=false, defaultValue="1") int page,
+						@PathVariable int categoryId, Model model) {
+		List<BoardDTO> boardDTOList = boardService.pagingList(page, categoryId);
+		PageDTO pageDTO = boardService.paging(page, categoryId);
+		model.addAttribute("boardList", boardDTOList);
+		model.addAttribute("paging", pageDTO);
 		model.addAttribute("category", categoryId);
 		return "board/list";
 	}
 	
+	
+	// 글 상세 페이지
 	@GetMapping("/detail/{id}")
-	public String findById(@PathVariable Long id, Model model) {
+	public String findById(@RequestParam(value="page", required=false, defaultValue="1") int page,
+							@PathVariable Long id, Model model) {
 		BoardDTO boardDTO = boardService.detail(id);
 		model.addAttribute("board", boardDTO);
 		
@@ -61,6 +80,7 @@ public class BoardController {
 		return "board/detail";
 	}
 	
+	// 글 수정 페이지 요청
 	@GetMapping("/update-form")
 	public String updateForm(@RequestParam Long id, Model model) {
 		BoardDTO boardDTO = boardService.findById(id);
@@ -68,12 +88,14 @@ public class BoardController {
 		return "board/update";
 	}
 	
+	// 글 수정 처리
 	@PostMapping("/update")
 	public String update(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
 		boardService.update(boardDTO);
 		return "redirect:/board/" + boardDTO.getCategoryId();
 	}
 	
+	// 글 삭제 처리
 	@GetMapping("/delete")
 	public String delete(@RequestParam Long id) {
 		int categoryId = boardService.findById(id).getCategoryId();
@@ -81,6 +103,7 @@ public class BoardController {
 		return "redirect:/board/" + categoryId;
 	}
 	
+	// 글 검색 목록
 	@GetMapping("/search")
 	public String search(@RequestParam String searchType, @RequestParam String q,
 						Model model) {
@@ -91,7 +114,6 @@ public class BoardController {
 		model.addAttribute("boardList", boardDTOList);
 		return "board/list";
 	}
-	
 	
 	
 }

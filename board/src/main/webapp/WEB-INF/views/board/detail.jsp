@@ -23,7 +23,7 @@
 	<%@include file="../layout/header.jsp"%>
 	<div class="body-content">
 		<div class="container col-7 my-4">
-			<table class="table mb-5">
+			<table class="table mb-3">
 				<tr>
 					<td colspan="2">${board.boardTitle}</td>
 				</tr>
@@ -44,6 +44,21 @@
 					<td colspan="2">첨부파일자리</td>
 				</tr>
 			</table>
+			
+			<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+				<c:choose>
+					<c:when test="${sessionScope.id eq board.memberId}">
+						<button class="btn btn-warning me-md-2" type="button">수정</button>
+						<button class="btn btn-secondary" type="button">삭제</button>
+					</c:when>
+					<c:otherwise>
+						<c:if test="${sessionScope.loginId eq 'admin'}">
+							<button class="btn btn-secondary" type="button">삭제</button>
+						</c:if>
+					</c:otherwise>
+				</c:choose>
+			</div>
+			
 
 			<span>댓글 쓰기</span>
 			<hr>
