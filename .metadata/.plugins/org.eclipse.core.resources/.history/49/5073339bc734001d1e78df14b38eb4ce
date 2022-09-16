@@ -1,0 +1,20 @@
+package com.its.board.repository;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.its.board.dto.CommentDTO;
+
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor
+public class CommentRepository {
+	private final SqlSessionTemplate sql;
+
+	public void save(CommentDTO commentDTO) {
+		sql.insert("Comment.save", commentDTO);
+	}
+	
+	
+}

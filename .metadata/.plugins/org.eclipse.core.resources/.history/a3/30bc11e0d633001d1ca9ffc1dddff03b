@@ -1,0 +1,20 @@
+package com.its.board.repository;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.its.board.dto.MemberDTO;
+
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor
+public class MemberRepository {
+
+	private final SqlSessionTemplate sql;
+	
+	public int save(MemberDTO memberDTO) {
+		return sql.insert("Member.save", memberDTO);
+	}
+
+}

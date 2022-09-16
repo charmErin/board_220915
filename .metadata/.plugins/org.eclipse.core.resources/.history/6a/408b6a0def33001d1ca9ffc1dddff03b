@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<%@include file ="../layout/header.jsp" %>
+	
+	<div class="container col-3">
+		<h2>회원 정보 수정</h2>
+		<form action="/member/update" method="post" name="updateForm">
+			<input type="hidden" name="id" value="${member.id}">
+			<div class="form-floating mb-3">
+			  <input type="text" name="loginId" class="form-control" id="floatingInput" value="${member.loginId}" readonly>
+			  <label for="floatingInput">아이디</label>
+			</div>
+			<div class="form-floating mb-3">
+			  <input type="password" name="memberPassword" class="form-control" id="floatingInput">
+			  <label for="floatingInput">비밀번호</label>
+			</div>
+			<div class="form-floating mb-3">
+			  <input type="password" name="memberName" class="form-control" id="floatingInput" value="${member.memberName}">
+			  <label for="floatingInput">이름</label>
+			</div>
+			<div class="form-floating mb-3">
+			  <input type="password" name="memberMobile" class="form-control" id="floatingInput" value="${member.memberMobile}">
+			  <label for="floatingInput">전화번호</label>
+			</div>
+			<input type="button" class="btn btn-outline-info d-grid mx-auto" onclick="updateCheck()" value="회원가입">
+		</form>		
+	</div>
+</body>
+<script>
+	const updateCheck = () => {
+		
+	}
+</script>
+</html>

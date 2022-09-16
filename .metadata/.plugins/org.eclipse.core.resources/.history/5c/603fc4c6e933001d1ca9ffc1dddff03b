@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<%@include file ="../layout/header.jsp" %>
+	
+	<div class="container">
+		<h2>회원가입</h2>
+		<form action="/member/save" method="post">
+			아이디: <input type="text" class="form-control" name="loginId">
+			비밀번호 : <input type="password" class="form-control" name="memberPassword">
+			이름 : <input type="text" class="form-control" name="memberName">
+			전화번호: <input type="text" class="form-control" name="memberMobile">
+			<input type="submit" class="btn btn-outline-info" value="회원가입">
+		</form>		
+	</div>
+</body>
+</html>

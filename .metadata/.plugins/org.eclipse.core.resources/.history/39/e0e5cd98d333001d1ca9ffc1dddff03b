@@ -1,0 +1,19 @@
+package com.its.board.service;
+
+import org.springframework.stereotype.Service;
+
+import com.its.board.dto.MemberDTO;
+import com.its.board.repository.MemberRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class MemberService {
+	private final MemberRepository memberRepository;
+	
+	public void save(MemberDTO memberDTO) {
+		int result = memberRepository.save(memberDTO);
+	}
+
+}

@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+	<a href="/member/save-form">회원가입</a><br>
+	<a href="/member/login-form">로그인</a><br>
+	
+	<a href="/board/save-form">글작성</a><br>
+	<a href="/board/findAll">글목록</a><br>
+	
+	<a href="#">#</a>
+</body>
+</html>
