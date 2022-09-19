@@ -42,6 +42,7 @@
 	<%@include file ="../layout/header.jsp" %>
 	<div class="body-content">
 	<div class="container my-4">
+		<div>
 		<c:choose>
 			<c:when test="${category eq 1}">
 				<h2>공지사항</h2>
@@ -56,22 +57,25 @@
 				<h2>자유게시판</h2>
 			</c:otherwise>
 		</c:choose>
+		</div>
 		
-		<form class="col-4" action="/board/search" method="get">
-			<div class="input-group">
-				<select class="form-select col-1" name="searchType">
-					<option value="boardTitle">제목</option>
-					<option value="boardWriter">작성자</option>
-					<option value="boardContetns">내용</option>
-				</select>
-				<input class="form-control col-2" type="text" name="q" placeholder="검색" aria-label="Search">
-			</div>
-		</form>
+		<div>
+	    	<form class="col-4" action="/board/search" method="get">
+				<div class="input-group">
+					<select class="form-select col-1" name="searchType">
+						<option value="boardTitle">제목</option>
+						<option value="boardWriter">작성자</option>
+						<option value="boardContetns">내용</option>
+					</select>
+					<input class="form-control" type="text" name="q" placeholder="검색" aria-label="Search">
+				</div>
+			</form>
+	    </div>
 		
-		<span class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+		
+		<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
 			<button onclick="boardSave()" class="btn btn-dark">글작성</button>
-		</span>
-		
+		</div>
 		
 		
 		<table class="table table-hover">
@@ -87,7 +91,7 @@
 				<tr>
 					<td>${board.id}</td>
 					<td>
-						<a href="/board/detail/${board.id}?page=${pageDTO.page}">${board.boardTitle}</a>
+						<a href="/board/detail/${categoryId}?page=${pageDTO.page}&id=${board.id}">${board.boardTitle}</a>
 						<c:if test="${board.boardFileName ne null}"><img src="#" alt=""/></c:if>
 					</td>
 					<td>${board.boardWriter}</td>
@@ -98,7 +102,7 @@
 			</c:forEach>
 		</table>
 	</div>
-	
+    
 	
 	<div class="container">
         <ul class="pagination justify-content-center">
@@ -142,7 +146,7 @@
             </c:choose>
         </ul>
     </div>
-	
+    </div>
 </body>
 <script>
 	const boardSave = () => {

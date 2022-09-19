@@ -20,6 +20,7 @@
 	<div class="body-content">
 	<div class="container col-5 my-4">
 		<form action="/board/update" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="page" value="${page}">
 			<select class="form-select mt-3 mb-3" aria-label="Default select example" name="categoryId">
 				<c:choose>
 					<c:when test="${board.categoryId eq 1}">

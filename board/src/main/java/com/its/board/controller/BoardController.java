@@ -1,9 +1,7 @@
 package com.its.board.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +33,7 @@ public class BoardController {
 		return "board/save";
 	}
 	
+	
 	// 글 저장 처리
 	@PostMapping("/save")
 	public String save(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
@@ -47,6 +46,7 @@ public class BoardController {
 		}
 	}
 	
+	
 	// 글 목록
 //	@GetMapping("/{categoryId}")
 //	public String findAll(@PathVariable int categoryId, Model model) {
@@ -55,65 +55,114 @@ public class BoardController {
 //		return "board/list";
 //	}
 	
+	
 	// 글 페이징 목록
 	@GetMapping("/{categoryId}")
-	public String paging(@RequestParam(value="page", required=false, defaultValue="1") int page,
-						@PathVariable int categoryId, Model model) {
-		List<BoardDTO> boardDTOList = boardService.pagingList(page, categoryId);
-		PageDTO pageDTO = boardService.paging(page, categoryId);
+	public String paging(@PathVariable int categoryId,
+						@RequestParam(value="page", required=false, defaultValue="1") int page,
+						Model model) {
+		List<BoardDTO> boardDTOList = boardService.pagingList(categoryId, page);
+		PageDTO pageDTO = boardService.paging(categoryId, page);
 		model.addAttribute("boardList", boardDTOList);
-		model.addAttribute("paging", pageDTO);
+		model.addAttribute("pageDTO", pageDTO);
 		model.addAttribute("category", categoryId);
 		return "board/list";
 	}
 	
 	
 	// 글 상세 페이지
-	@GetMapping("/detail/{id}")
-	public String findById(@RequestParam(value="page", required=false, defaultValue="1") int page,
-							@PathVariable Long id, Model model) {
+	@GetMapping("/detail/{categoryId}")
+	public String findById(@PathVariable int categoryId,
+							@RequestParam(value="page", required=false, defaultValue="1") int page,
+							@RequestParam Long id, Model model) {
 		BoardDTO boardDTO = boardService.detail(id);
 		model.addAttribute("board", boardDTO);
 		
 		List<CommentDTO> commentDTOList = commentService.findAll(id);
 		model.addAttribute("commentList", commentDTOList);
+		
+		model.addAttribute("categoryId", categoryId);
+		model.addAttribute("page", page);
 		return "board/detail";
 	}
 	
+	
 	// 글 수정 페이지 요청
 	@GetMapping("/update-form")
-	public String updateForm(@RequestParam Long id, Model model) {
+	public String updateForm(@RequestParam(value="page", required=false, defaultValue="1") int page,
+							@RequestParam Long id, Model model) {
 		BoardDTO boardDTO = boardService.findById(id);
 		model.addAttribute("board", boardDTO);
+		model.addAttribute("page", page);
 		return "board/update";
 	}
+	
 	
 	// 글 수정 처리
 	@PostMapping("/update")
 	public String update(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
 		boardService.update(boardDTO);
-		return "redirect:/board/" + boardDTO.getCategoryId();
+		return "redirect:/board/detail/" + boardDTO.getCategoryId() + "?page=" + page + "&id=" + boardDTO.getId();
 	}
 	
+	
 	// 글 삭제 처리
-	@GetMapping("/delete")
-	public String delete(@RequestParam Long id) {
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable Long id) {
 		int categoryId = boardService.findById(id).getCategoryId();
 		boardService.delete(id);
 		return "redirect:/board/" + categoryId;
 	}
 	
+	
 	// 글 검색 목록
+//	@GetMapping("/search")
+//	public String search(@RequestParam String searchType, @RequestParam String q,
+//						Model model) {
+//		List<BoardDTO> boardDTOList = boardService.search(searchType, q);
+//		model.addAttribute("boardList", boardDTOList);
+//		return "board/list";
+//	}
+	
+	
+	// 글 검색 페이징 목록
 	@GetMapping("/search")
-	public String search(@RequestParam String searchType, @RequestParam String q,
-						Model model) {
-		Map<String, String> searchMap = new HashMap<String, String>();
-		searchMap.put("type", searchType);
-		searchMap.put("q", q);
-		List<BoardDTO> boardDTOList = boardService.search(searchMap);
-		model.addAttribute("boardList", boardDTOList);
-		return "board/list";
+	public String searchList(@RequestParam(value="page", required=false, defaultValue="1") int page,
+							@RequestParam String searchType,
+							@RequestParam String q,Model model) {
+		List<BoardDTO> searchList = boardService.searchList(page, searchType, q);
+		PageDTO pageDTO = boardService.searchPaging(page, searchType, q);
+		model.addAttribute("searchList", searchList);
+		model.addAttribute("pageDTO", pageDTO);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("q", q);
+		return "board/search";
 	}
 	
+	
+	// 글 검색 상세 페이지
+	@GetMapping("/search-detail")
+	public String searchDetail(@RequestParam(value="page", required=false, defaultValue="1") int page,
+							@RequestParam String searchType,
+							@RequestParam String q,
+							@RequestParam Long id, Model model) {
+		BoardDTO boardDTO = boardService.detail(id);
+		model.addAttribute("board", boardDTO);
+		
+		List<CommentDTO> commentDTOList = commentService.findAll(id);
+		model.addAttribute("commentList", commentDTOList);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("q", q);
+		return "board/searchDetail";
+	}
+
+	
+	// 글 검색 상세페이지 수정 요청
+	@GetMapping("/search/update-form")
+	public String searchUpdateForm() {
+		
+	}
 	
 }

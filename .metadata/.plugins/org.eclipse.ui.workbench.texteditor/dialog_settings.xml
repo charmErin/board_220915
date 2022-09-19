@@ -6,27 +6,27 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="pageDTO" key="selection"/>
+		<item value="goSearch" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="goSearch"/>
+			<item value="innerHTML"/>
+			<item value="comment-contents"/>
+			<item value="commentUpdateForm"/>
+			<item value=")"/>
 			<item value="paging"/>
 			<item value="last-child"/>
 			<item value="rawComment"/>
 			<item value="S"/>
-			<item value="comment-contents"/>
 			<item value="commentUpdate"/>
 			<item value="appSer"/>
 			<item value="file"/>
 			<item value="Upload"/>
 			<item value="Upliad"/>
 			<item value="lombok"/>
-			<item value="javax.servlet"/>
-			<item value="te"/>
-			<item value="#"/>
-			<item value="sqlSession"/>
 		</list>
 		<list key="replacehistory">
 			<item value="pageDTO"/>

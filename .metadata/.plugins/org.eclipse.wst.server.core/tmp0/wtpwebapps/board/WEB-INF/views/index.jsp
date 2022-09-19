@@ -21,7 +21,7 @@
 	<div class="body-content">
 	
 		<div>
-			가나다라라라ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ		
+			index.jsp
 		</div>
 	</div>
 </body>

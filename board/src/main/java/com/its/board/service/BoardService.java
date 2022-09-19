@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.its.board.dto.BoardDTO;
 import com.its.board.dto.PageDTO;
+import com.its.board.dto.SearchDTO;
 import com.its.board.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class BoardService {
 		if (!boardFile.isEmpty()) {
 			String boardFileName = boardFile.getOriginalFilename();
 			boardFileName = System.currentTimeMillis() + "_" + boardFileName;
-			String savePath = "D:\\eclipse_file\\" + boardFileName;
+			String savePath = "D:\\upload\\" + boardFileName;
 			boardFile.transferTo(new File(savePath));
 			boardDTO.setBoardFileName(boardFileName);
 		}
@@ -51,7 +52,7 @@ public class BoardService {
 		if (!boardFile.isEmpty()) {
 			String boardFileName = boardFile.getOriginalFilename();
 			boardFileName = System.currentTimeMillis() + "_" + boardFileName;
-			String savePath = "D:\\eclipse_img\\" + boardFileName;
+			String savePath = "D:\\upload\\" + boardFileName;
 			boardFile.transferTo(new File(savePath));
 			boardDTO.setBoardFileName(boardFileName);
 		}
@@ -62,15 +63,18 @@ public class BoardService {
 		boardRepository.delete(id);
 	}
 
-	public List<BoardDTO> search(Map<String, String> searchMap) {
+	public List<BoardDTO> search(String searchType, String q) {
+		Map<String, String> searchMap = new HashMap<String, String>();
+		searchMap.put("type", searchType);
+		searchMap.put("q", q);
 		return boardRepository.search(searchMap);
 	}
 	
 	
-	private static final int PAGE_LIMIT = 3;
-	private static final int BLOCK_LIMIT = 5;
+	private static final int PAGE_LIMIT = 5;
+	private static final int BLOCK_LIMIT = 3;
 
-	public List<BoardDTO> pagingList(int page, int categoryId) {
+	public List<BoardDTO> pagingList(int categoryId, int page) {
 		int pagingStart = (page-1) * PAGE_LIMIT;
 		Map<String, Integer> pagingMap = new HashMap<String, Integer>();
 		pagingMap.put("categoryId", categoryId);
@@ -79,8 +83,40 @@ public class BoardService {
 		return boardRepository.pagingList(pagingMap);
 	}
 
-	public PageDTO paging(int page, int categoryId) {
+	public PageDTO paging(int categoryId, int page) {
 		Long boardCount = boardRepository.boardCount(categoryId);
+		
+        int maxPage = (int)(Math.ceil((double)boardCount / PAGE_LIMIT));
+        int startPage = (((int)(Math.ceil((double)page / BLOCK_LIMIT))) - 1) * BLOCK_LIMIT + 1;
+        int endPage = startPage + BLOCK_LIMIT - 1;
+        
+        if(endPage > maxPage) {
+        	endPage = maxPage;        	
+        }
+        
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setPage(page);
+        pageDTO.setStartPage(startPage);
+        pageDTO.setEndPage(endPage);
+        pageDTO.setMaxPage(maxPage);
+        return pageDTO;
+	}
+
+	public List<BoardDTO> searchList(int page, String searchType, String q) {
+		int pagingStart = (page-1) * PAGE_LIMIT;
+		SearchDTO searchDTO = new SearchDTO();
+		searchDTO.setSearchType(searchType);
+		searchDTO.setQ(q);
+		searchDTO.setStart(pagingStart);
+		searchDTO.setCount(PAGE_LIMIT);
+		return boardRepository.searchList(searchDTO);
+	}
+
+	public PageDTO searchPaging(int page, String searchType, String q) {
+		SearchDTO searchDTO = new SearchDTO();
+		searchDTO.setSearchType(searchType);
+		searchDTO.setQ(q);
+		Long boardCount = boardRepository.searchBoardCount(searchDTO);
 		
         int maxPage = (int)(Math.ceil((double)boardCount / PAGE_LIMIT));
         int startPage = (((int)(Math.ceil((double)page / BLOCK_LIMIT))) - 1) * BLOCK_LIMIT + 1;

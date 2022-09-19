@@ -5,7 +5,137 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2022-09-15T16:00:00Z</updated>
+  <updated>2022-09-16T09:00:00Z</updated>
+  <entry>
+    <title>Spring Tools 4.16.0 released</title>
+    <link rel="alternate" href="https://spring.io/blog/2022/09/16/spring-tools-4-16-0-released" />
+    <category term="releases" label="Releases" />
+    <author>
+      <name>Martin Lippert</name>
+    </author>
+    <id>tag:spring.io,2022-09-16:4908</id>
+    <updated>2022-09-16T09:00:00Z</updated>
+    <content type="html">&lt;p&gt;Dear Spring Community,&lt;/p&gt;
+&lt;p&gt;I am happy to announce the 4.16.0 release of the Spring Tools 4 for Eclipse, Visual Studio Code, and Theia.&lt;/p&gt;&lt;h4&gt;&lt;a href="#major-changes-to-the-spring-tools-4-for-eclipse-distribution" class="anchor" name="major-changes-to-the-spring-tools-4-for-eclipse-distribution"&gt;&lt;/a&gt;major changes to the Spring Tools 4 for Eclipse distribution&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;updated to Eclipse 2022-09 release (&lt;a href="https://www.eclipse.org/eclipseide/2022-09/"&gt;new and noteworthy&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;new distribution build for Linux on ARM included now (experimental) - &lt;a href="https://github.com/spring-projects/sts4/wiki/Previous-Versions"&gt;downloads are here&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;m2e 2.0.5 release included in distribution builds for Eclipse&lt;/li&gt;
+&lt;/ul&gt;&lt;h4&gt;&lt;a href="#important-note-for-upgrading-from-a-previous-installation-on-eclipse" class="anchor" name="important-note-for-upgrading-from-a-previous-installation-on-eclipse"&gt;&lt;/a&gt;important note for upgrading from a previous installation on Eclipse&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;Due to the major update to m2e 2.0 that comes with the Eclipse 2022-09 release, several additional third-party m2e connector extensions that the Spring Tools 4 for Eclipse distribution had installed in the past are no longer compatible. This prevents the automatic update of installations of Spring Tools prior to 4.16.0 to the new release. There are two options how to mitigate this:&lt;/li&gt;
+  &lt;li&gt;start with a fresh install of Spring Tools 4.16.0 for Eclipse&lt;/li&gt;
+  &lt;li&gt;go to the &lt;code&gt;Preferences -&amp;gt; Installation Details&lt;/code&gt; and uninstall the following features via the &lt;code&gt;Uninstall&lt;/code&gt; button, then restart the IDE, do a &lt;code&gt;Check for Updates&lt;/code&gt;, and do the upgrade.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;Maven Integration for Eclipse JDT Annotation Processor Toolkit&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;m2e connector for mavenarchiver pom properties&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;m2e connector for build-helper-maven-plugin&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Eclipse 2022-09 comes with ANSI coloring for the console view built-in, so we don&amp;rsquo;t need to third-party extension &lt;code&gt;Ansi Console&lt;/code&gt; anymore. If you upgrade an existing installation, please uninstall this extension prior or after upgrading Spring Tools 4 for Eclipse.&lt;/li&gt;
+&lt;/ul&gt;&lt;h4&gt;&lt;a href="#fixes-and-improvements" class="anchor" name="fixes-and-improvements"&gt;&lt;/a&gt;fixes and improvements&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;(Spring Boot)&lt;/em&gt; fixed: Workspace symbol null on custom annotations (&lt;a href="https://github.com/spring-projects/sts4/issues/818"&gt;#818&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Spring Boot)&lt;/em&gt; fixed: organize imports causes communication issues with the language server (&lt;a href="https://github.com/spring-projects/sts4/issues/806"&gt;#806&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Spring Boot)&lt;/em&gt; enhancement: Quick fix action to refactor field injection to constructor injection (&lt;a href="https://github.com/spring-projects/sts4/issues/522"&gt;#522&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Spring Boot)&lt;/em&gt; fixed: Workspace symbol null on custom annotations (&lt;a href="https://github.com/spring-projects/sts4/issues/818"&gt;#818&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Eclipse)&lt;/em&gt; enhancement: adapt boot launch support to new platform-enabled ansi console coloring support (&lt;a href="https://github.com/spring-projects/sts4/issues/823"&gt;#823&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Eclipse)&lt;/em&gt; fixed: cleanup/remove more entries from Error Log (&lt;a href="https://github.com/spring-projects/sts4/issues/802"&gt;#802&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Eclipse)&lt;/em&gt; fixed: switch live hovers in Eclipse to direct-connect after launch (&lt;a href="https://github.com/spring-projects/sts4/issues/832"&gt;#832&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Eclipse)&lt;/em&gt; fixed: add switch in boot launch config to enable/disable automatic live hover connect (&lt;a href="https://github.com/spring-projects/sts4/issues/843"&gt;#843&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Eclipse)&lt;/em&gt; fixed: live hover auto-connect on launch should check for actuators (&lt;a href="https://github.com/spring-projects/sts4/issues/842"&gt;#842&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Eclipse)&lt;/em&gt; enhancement: spring tool suite linux arm distribution (&lt;a href="https://github.com/spring-projects/sts4/issues/841"&gt;#841&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(VSCode)&lt;/em&gt; fixed: Extension never activates, throwing error &amp;ldquo;Header must provide a Content-Length property&amp;rdquo; (&lt;a href="https://github.com/spring-projects/sts4/issues/811"&gt;#811&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Concourse)&lt;/em&gt; fixed: Concourse extension doesn&amp;rsquo;t know about &amp;ldquo;check_every: never&amp;rdquo; for a resource (&lt;a href="https://github.com/spring-projects/sts4/issues/816"&gt;#816&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Concourse)&lt;/em&gt; fixed: Concourse extension doesn&amp;rsquo;t know about &amp;ldquo;depth&amp;rdquo; for a semver resource (&lt;a href="https://github.com/spring-projects/sts4/issues/830"&gt;#830&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Concourse)&lt;/em&gt; fixed: Concourse extension doesn&amp;rsquo;t recognize URL for &amp;ldquo;registry_mirror&amp;rdquo; with a docker-image resource (&lt;a href="https://github.com/spring-projects/sts4/issues/831"&gt;#831&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Concourse)&lt;/em&gt; fixed: vscode-concourse: support both .yml and .yaml files (&lt;a href="https://github.com/spring-projects/sts4/issues/838"&gt;#838&lt;/a&gt;) - contributed by &lt;a href="https://github.com/bmalehorn"&gt;bmalehorn&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;(Concourse)&lt;/em&gt; fixed: vscode-concourse: add language icon for pipelines &amp;amp; tasks (&lt;a href="https://github.com/spring-projects/sts4/issues/839"&gt;#839&lt;/a&gt;) - contributed by &lt;a href="https://github.com/bmalehorn"&gt;bmalehorn&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To download the distribution for Eclipse and find links to the marketplace entries for Visual Studio Code and Theia, please go visit:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Spring Tools 4: &lt;a href="https://spring.io/tools/"&gt;https://spring.io/tools/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Detailed changes can be found here: &lt;a href="https://github.com/spring-projects/sts4/wiki/Changelog#2022-09-16-4160-release-incl-language-servers-version-1390"&gt;https://github.com/spring-projects/sts4/wiki/Changelog#2022-09-16-4160-release-incl-language-servers-version-1390&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Spring Tools 4.16.1 is scheduled to be released in late October 2022.&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
+  <entry>
+    <title>Spring Cloud Sleuth OpenTelemetry (OTel) 1.1.0 Has Been Released</title>
+    <link rel="alternate" href="https://spring.io/blog/2022/09/16/spring-cloud-sleuth-opentelemetry-otel-1-1-0-has-been-released" />
+    <category term="releases" label="Releases" />
+    <author>
+      <name>Marcin Grzejszczak</name>
+    </author>
+    <id>tag:spring.io,2022-09-16:4909</id>
+    <updated>2022-09-16T07:00:00Z</updated>
+    <content type="html">&lt;p&gt;On behalf of the community, I am pleased to announce that the first General Availability (RELEASE) of the &lt;a href="https://github.com/spring-cloud-incubator/spring-cloud-sleuth-otel/"&gt;Spring Cloud Sletuh OTel 1.1.0&lt;/a&gt; project is available today. The release can be found in &lt;a href="https://repo1.maven.org/maven2/org/springframework/cloud/spring-cloud-sleuth-otel-dependencies/1.1.0/"&gt;Maven Central&lt;/a&gt;. You can check out the &lt;a href="https://spring-projects-experimental.github.io/spring-cloud-sleuth-otel/docs/1.1.0/reference/html/index.html"&gt;reference documentation for more information&lt;/a&gt;.&lt;/p&gt;&lt;h2&gt;&lt;a href="#what-is-this" class="anchor" name="what-is-this"&gt;&lt;/a&gt;What is this?&lt;/h2&gt;
+&lt;p&gt;Spring Cloud Sleuth OTel is an extension project to &lt;a href="https://projects.spring.io/spring-cloud-sleuth/"&gt;Spring Cloud Sleuth&lt;/a&gt; that comes with an &lt;a href="https://opentelemetry.io"&gt;OpenTelemetry&lt;/a&gt; tracer.&lt;/p&gt;
+&lt;p&gt;As always, we welcome feedback on &lt;a href="https://github.com/spring-projects-experimental/spring-cloud-sleuth-otel/"&gt;GitHub&lt;/a&gt;, on &lt;a href="https://gitter.im/spring-cloud/spring-cloud"&gt;Gitter&lt;/a&gt;, on &lt;a href="https://stackoverflow.com/questions/tagged/spring-cloud-sleuth"&gt;Stack Overflow&lt;/a&gt;, or on &lt;a href="https://twitter.com/SpringCloud"&gt;Twitter&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To get started with Maven with a BOM (dependency management only):&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;&lt;br/&gt;&amp;lt;dependencyManagement&amp;gt;&#xD;
+    &amp;lt;dependencies&amp;gt;&#xD;
+        &amp;lt;dependency&amp;gt;&#xD;
+            &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
+            &amp;lt;artifactId&amp;gt;spring-cloud-dependencies&amp;lt;/artifactId&amp;gt;&#xD;
+            &amp;lt;version&amp;gt;2021.0.4&amp;lt;/version&amp;gt;&#xD;
+            &amp;lt;type&amp;gt;pom&amp;lt;/type&amp;gt;&#xD;
+            &amp;lt;scope&amp;gt;import&amp;lt;/scope&amp;gt;&#xD;
+        &amp;lt;/dependency&amp;gt;&#xD;
+        &amp;lt;dependency&amp;gt;&#xD;
+            &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
+            &amp;lt;artifactId&amp;gt;spring-cloud-sleuth-otel-dependencies&amp;lt;/artifactId&amp;gt;&#xD;
+            &amp;lt;version&amp;gt;1.1.0&amp;lt;/version&amp;gt;&#xD;
+            &amp;lt;scope&amp;gt;import&amp;lt;/scope&amp;gt;&#xD;
+            &amp;lt;type&amp;gt;pom&amp;lt;/type&amp;gt;&#xD;
+        &amp;lt;/dependency&amp;gt;&#xD;
+    &amp;lt;/dependencies&amp;gt;&#xD;
+&amp;lt;/dependencyManagement&amp;gt;&#xD;
+&amp;lt;dependencies&amp;gt;&#xD;
+    &amp;lt;dependency&amp;gt;&#xD;
+        &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
+        &amp;lt;artifactId&amp;gt;spring-cloud-starter-sleuth&amp;lt;/artifactId&amp;gt;&#xD;
+        &amp;lt;exclusions&amp;gt;&#xD;
+            &amp;lt;exclusion&amp;gt;&#xD;
+                &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
+                &amp;lt;artifactId&amp;gt;spring-cloud-sleuth-brave&amp;lt;/artifactId&amp;gt; &amp;lt;!-- We want to exclude the default tracer coming from Sleuth... --&amp;gt;&#xD;
+            &amp;lt;/exclusion&amp;gt;&#xD;
+        &amp;lt;/exclusions&amp;gt;&#xD;
+    &amp;lt;/dependency&amp;gt;&#xD;
+    &amp;lt;dependency&amp;gt;&#xD;
+        &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
+        &amp;lt;artifactId&amp;gt;spring-cloud-sleuth-otel-autoconfigure&amp;lt;/artifactId&amp;gt;  &amp;lt;!-- ... and we want to include the one coming from Spring Cloud Sleuth OTel --&amp;gt;&#xD;
+    &amp;lt;/dependency&amp;gt;&#xD;
+&amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;or with Gradle:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;buildscript {&#xD;
+dependencies {&#xD;
+classpath &amp;quot;io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE&amp;quot;&#xD;
+}&#xD;
+}&#xD;
+&#xD;
+&#xD;
+&#xD;
+apply plugin: &amp;quot;io.spring.dependency-management&amp;quot;&#xD;
+&#xD;
+dependencyManagement {&#xD;
+imports {&#xD;
+mavenBom &amp;#39;org.springframework.cloud:spring-cloud-dependencies:2021.0.4&amp;#39;&#xD;
+mavenBom &amp;#39;org.springframework.cloud:spring-cloud-sleuth-otel-dependencies:1.1.0&amp;#39;&#xD;
+}&#xD;
+}&#xD;
+&#xD;
+dependencies {&#xD;
+implementation(&amp;#39;org.springframework.cloud:spring-cloud-starter-sleuth&amp;#39;) {&#xD;
+    exclude group: &amp;#39;org.springframework.cloud&amp;#39;, module: &amp;#39;spring-cloud-sleuth-brave&amp;#39; //  We want to exclude the default tracer coming from Sleuth...&#xD;
+}&#xD;
+implementation &amp;#39;org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure&amp;#39; // ... and we want to include the one coming from Spring Cloud Sleuth OTel&#xD;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
   <entry>
     <title>A Bootiful Podcast: big data legend, former Pivot, and friend to the Spring community, Tim Spann</title>
     <link rel="alternate" href="https://spring.io/blog/2022/09/15/a-bootiful-podcast-big-data-legend-former-pivot-and-friend-to-the-spring-community-tim-spann" />
@@ -822,55 +952,6 @@ class RequestHashingGatewayFilterFactoryTest {&#xD;
 &lt;p&gt;This release includes &lt;a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.7.3"&gt;48 bug fixes, documentation improvements, and dependency upgrades&lt;/a&gt;. Thanks to all those who have contributed with issue reports and pull requests.&lt;/p&gt;&lt;h3&gt;&lt;a href="#how-can-you-help" class="anchor" name="how-can-you-help"&gt;&lt;/a&gt;How can you help?&lt;/h3&gt;
 &lt;p&gt;If you&amp;rsquo;re interested in helping out, check out the &lt;a href="https://github.com/spring-projects/spring-boot/labels/status%3A%20ideal-for-contribution"&gt;&amp;ldquo;ideal for contribution&amp;rdquo; tag&lt;/a&gt; in the issue repository. If you have general questions, please ask on &lt;a href="https://stackoverflow.com"&gt;stackoverflow.com&lt;/a&gt; using the &lt;a href="https://stackoverflow.com/tags/spring-boot"&gt;&lt;code&gt;spring-boot&lt;/code&gt; tag&lt;/a&gt; or chat with the community on &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://spring.io/projects/spring-boot/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot/issues"&gt;Issues&lt;/a&gt; | &lt;a href="https://docs.spring.io/spring-boot/docs/2.7.3/reference/html"&gt;Documentation&lt;/a&gt; | &lt;a href="https://stackoverflow.com/questions/tagged/spring-boot"&gt;Stack Overflow&lt;/a&gt; | &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;&lt;/p&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Boot 2.6.11 available now</title>
-    <link rel="alternate" href="https://spring.io/blog/2022/08/17/spring-boot-2-6-11-available-now" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>St?phane Nicoll</name>
-    </author>
-    <id>tag:spring.io,2022-08-18:4886</id>
-    <updated>2022-08-18T06:23:13Z</updated>
-    <content type="html">&lt;p&gt;On behalf of the team and everyone who has contributed, I&amp;rsquo;m happy to announce that Spring Boot &lt;code&gt;2.6.11&lt;/code&gt; has been released and is now available from Maven Central.&lt;/p&gt;
-&lt;p&gt;This release includes &lt;a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.6.11"&gt;40 bug fixes, documentation improvements, and dependency upgrades&lt;/a&gt;. Thanks to all those who have contributed with issue reports and pull requests.&lt;/p&gt;&lt;h3&gt;&lt;a href="#how-can-you-help" class="anchor" name="how-can-you-help"&gt;&lt;/a&gt;How can you help?&lt;/h3&gt;
-&lt;p&gt;If you&amp;rsquo;re interested in helping out, check out the &lt;a href="https://github.com/spring-projects/spring-boot/labels/status%3A%20ideal-for-contribution"&gt;&amp;ldquo;ideal for contribution&amp;rdquo; tag&lt;/a&gt; in the issue repository. If you have general questions, please ask on &lt;a href="https://stackoverflow.com"&gt;stackoverflow.com&lt;/a&gt; using the &lt;a href="https://stackoverflow.com/tags/spring-boot"&gt;&lt;code&gt;spring-boot&lt;/code&gt; tag&lt;/a&gt; or chat with the community on &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://spring.io/projects/spring-boot/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot/issues"&gt;Issues&lt;/a&gt; | &lt;a href="https://docs.spring.io/spring-boot/docs/2.6.11/reference/html"&gt;Documentation&lt;/a&gt; | &lt;a href="https://stackoverflow.com/questions/tagged/spring-boot"&gt;Stack Overflow&lt;/a&gt; | &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;&lt;/p&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Authorization Server 1.0.0-M1 available now</title>
-    <link rel="alternate" href="https://spring.io/blog/2022/08/17/spring-authorization-server-1-0-0-m1-available-now" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Joe Grandja</name>
-    </author>
-    <id>tag:spring.io,2022-08-17:4885</id>
-    <updated>2022-08-17T09:00:00Z</updated>
-    <content type="html">&lt;div class="paragraph"&gt;
-&lt;p&gt;On behalf of the team and everyone who has contributed, it is my pleasure to announce the general availability of Spring Authorization Server 1.0.0-M1.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="paragraph"&gt;
-&lt;p&gt;You can download it from &lt;a href="https://repo.spring.io/milestone"&gt;repo.spring.io&lt;/a&gt; milestone repository by using the module coordinates:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="listingblock"&gt;
-&lt;div class="content"&gt;
-&lt;pre class="prettyprint highlight"&gt;&lt;code&gt;implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.0.0-M1'&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="paragraph"&gt;
-&lt;p&gt;See the &lt;a href="https://github.com/spring-projects/spring-authorization-server/releases/tag/1.0.0-M1"&gt;release notes&lt;/a&gt; for complete details.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="paragraph"&gt;
-&lt;p&gt;To get started using Spring Authorization Server, see the &lt;a href="https://docs.spring.io/spring-authorization-server/docs/current/reference/html/getting-started.html"&gt;Getting Started&lt;/a&gt; chapter of the reference documentation and the &lt;a href="https://github.com/spring-projects/spring-authorization-server/tree/main/samples"&gt;samples&lt;/a&gt; to become familiar with setup and configuration.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="paragraph"&gt;
-&lt;p&gt;We would love to gather your feedback as we strive to improve and build upon this release.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="paragraph"&gt;
-&lt;p&gt;&lt;a href="https://spring.io/projects/spring-authorization-server"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-authorization-server/issues"&gt;GitHub Issues&lt;/a&gt; | &lt;a href="https://app.zenhub.com/workspaces/authorization-server-5e8f3182b5e8f5841bfc4902/board?repos=248032165"&gt;ZenHub Board&lt;/a&gt;&lt;/p&gt;
-&lt;/div&gt;
 &lt;!-- rendered by Sagan Renderer Service --&gt;</content>
   </entry>
 </feed>

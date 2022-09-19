@@ -33,12 +33,12 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td colspan="2">작성일: <fmt:formatDate pattern="yyyy-MM-dd"
+					<td colspan="2">작성일: <fmt:formatDate pattern="yyyy-MM-dd hh:MM:ss"
 							value="${board.createdTime}"></fmt:formatDate></td>
 				</tr>
 				<tr>
 					<td colspan="2"><textarea class="form-control-plaintext"
-							rows="5">${board.boardContents}</textarea></td>
+							rows="5" readonly>${board.boardContents}</textarea></td>
 				</tr>
 				<tr>
 					<td colspan="2">첨부파일자리</td>
@@ -48,12 +48,14 @@
 			<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
 				<c:choose>
 					<c:when test="${sessionScope.id eq board.memberId}">
-						<button class="btn btn-warning me-md-2" type="button">수정</button>
-						<button class="btn btn-secondary" type="button">삭제</button>
+						<button class="btn btn-warning me-md-2" type="button" onclick="updateBoard()">수정</button>
+						<button class="btn btn-secondary me-md-2" type="button" onclick="deleteBoard()">삭제</button>
+						<button class="btn btn-dark" type="button" onclick="goBack()">글목록</button>
 					</c:when>
 					<c:otherwise>
 						<c:if test="${sessionScope.loginId eq 'admin'}">
-							<button class="btn btn-secondary" type="button">삭제</button>
+							<button class="btn btn-secondary me-md-2" type="button" onclick="deleteBoard()">삭제</button>
+							<button class="btn btn-dark" type="button" onclick="goBack()">글목록</button>
 						</c:if>
 					</c:otherwise>
 				</c:choose>
@@ -97,7 +99,7 @@
 									<c:choose>
 										<c:when test="${sessionScope.loginId eq 'admin'}">
 											<td></td>
-											<td><button class="btn btn-outline-danger" type="button"
+											<td><button id="deleteBtn_${comment.id}" class="btn btn-outline-danger" type="button"
 													onclick="commentDelete('${comment.id}')">삭제</button></td>
 										</c:when>
 										<c:otherwise>
@@ -114,6 +116,17 @@
 	</div>
 </body>
 <script>
+	const updateBoard = () => {
+		location.href = "/board/update-form?page=" + ${page} + "&id=" + ${board.id};
+	}
+	
+	const deleteBoard = () => {
+		if (confirm("삭제하시겠습니까?")) {
+			location.href = "/board/delete/" + ${board.id};
+		}
+	}
+
+
 	const commentSave = () => {
 		const boardId = '${board.id}';
 		const memberId = '${sessionScope.id}';
@@ -138,19 +151,19 @@
 							+ '	</tr>';
 
 				for (let i in result) {
-					output += '	<tr>'
-							+ '		<td>' + result[i].commentContents + '</td>'
-							+ '		<td>' + result[i].commentWriter + '</td>'
-							+ '		<td>' + moment(result[i].createdTime).format("YYYY-MM-DD HH:mm:ss") + '</td>';
+					output += '	<tr id="comment_' + result[i].id + '">'
+							+ '		<td id="contents_' + result[i].id + '">' + result[i].commentContents + '</td>'
+							+ '		<td id="writer_' + result[i].id + '">' + result[i].commentWriter + '</td>'
+							+ '		<td id="createdTime_' + result[i].id + '">' + moment(result[i].createdTime).format("YYYY-MM-DD HH:mm:ss") + '</td>';
 							
 					if (memberId == result[i].memberId) {
-						output += '<td><button class="btn btn-outline-info" type="button" onclick="commentUpdateForm((' + result[i].id + ')">수정</button></td>'
-								+ '<td><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
+						output += '<td id="updateBtn_' + result[i].id + '"><button class="btn btn-outline-info" type="button" onclick="commentUpdateForm(' + result[i].id + ",'" + result[i].commentContents + "'"  + ')">수정</button></td>'
+								+ '<td id="deleteBtn_' + result[i].id + '"><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
 						
 					} else {
 						if (loginId == 'admin') {
 							output += '<td></td>'
-									+ '<td><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
+									+ '<td id="deleteBtn_' + result[i].id + '"><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
 						} else {
 							output += '	<td></td>'
 									+ '	<td></td>';
@@ -162,7 +175,7 @@
 				output += '</table>';
 				
 				commentList.innerHTML = output;
-				document.getElementById("comment-contents").innerHTML = "";
+				document.getElementById("comment-contents").value = null;
 			}
 		});
 	}
@@ -180,28 +193,28 @@
 			dataType: "json",
 			success: function(result) {
 				let output = '<table class="table">'
-							+ '	<tr>'
-							+ '		<th>내용</th>'
-							+ '		<th>작성자</th>'
-							+ '		<th>작성일자</th>'
-							+ '		<th></th>'
-							+ '		<th></th>'
-							+ '	</tr>';
+					+ '	<tr>'
+					+ '		<th>내용</th>'
+					+ '		<th>작성자</th>'
+					+ '		<th>작성일자</th>'
+					+ '		<th></th>'
+					+ '		<th></th>'
+					+ '	</tr>';
 
 				for (let i in result) {
-					output += '	<tr>'
-							+ '		<td>' + result[i].commentContents + '</td>'
-							+ '		<td>' + result[i].commentWriter + '</td>'
-							+ '		<td>' + moment(result[i].createdTime).format("YYYY-MM-DD HH:mm:ss") + '</td>';
+					output += '	<tr id="comment_' + result[i].id + '">'
+							+ '		<td id="contents_' + result[i].id + '">' + result[i].commentContents + '</td>'
+							+ '		<td id="writer_' + result[i].id + '">' + result[i].commentWriter + '</td>'
+							+ '		<td id="createdTime_' + result[i].id + '">' + moment(result[i].createdTime).format("YYYY-MM-DD HH:mm:ss") + '</td>';
 							
 					if (memberId == result[i].memberId) {
-						output += '<td><button class="btn btn-outline-info" type="button" onclick="commentUpdateForm((' + result[i].id + ')">수정</button></td>'
-								+ '<td><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
+						output += '<td id="updateBtn_' + result[i].id + '"><button class="btn btn-outline-info" type="button" onclick="commentUpdateForm(' + result[i].id + ",'" + result[i].commentContents + "'"  + ')">수정</button></td>'
+								+ '<td id="deleteBtn_' + result[i].id + '"><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
 						
 					} else {
 						if (loginId == 'admin') {
 							output += '<td></td>'
-									+ '<td><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
+									+ '<td id="deleteBtn_' + result[i].id + '"><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
 						} else {
 							output += '	<td></td>'
 									+ '	<td></td>';
@@ -253,37 +266,41 @@
 					+ '		<th></th>'
 					+ '	</tr>';
 
-			for (let i in result) {
-				output += '	<tr>'
-						+ '		<td>' + result[i].commentContents + '</td>'
-						+ '		<td>' + result[i].commentWriter + '</td>'
-						+ '		<td>' + moment(result[i].createdTime).format("YYYY-MM-DD HH:mm:ss") + '</td>';
+				for (let i in result) {
+					output += '	<tr id="comment_' + result[i].id + '">'
+							+ '		<td id="contents_' + result[i].id + '">' + result[i].commentContents + '</td>'
+							+ '		<td id="writer_' + result[i].id + '">' + result[i].commentWriter + '</td>'
+							+ '		<td id="createdTime_' + result[i].id + '">' + moment(result[i].createdTime).format("YYYY-MM-DD HH:mm:ss") + '</td>';
+							
+					if (memberId == result[i].memberId) {
+						output += '<td id="updateBtn_' + result[i].id + '"><button class="btn btn-outline-info" type="button" onclick="commentUpdateForm(' + result[i].id + ",'" + result[i].commentContents + "'"  + ')">수정</button></td>'
+								+ '<td id="deleteBtn_' + result[i].id + '"><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
 						
-				if (memberId == result[i].memberId) {
-					output += '<td><button class="btn btn-outline-info" type="button" onclick="commentUpdateForm((' + result[i].id + ')">수정</button></td>'
-							+ '<td><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
-					
-				} else {
-					if (loginId == 'admin') {
-						output += '<td></td>'
-								+ '<td><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
 					} else {
-						output += '	<td></td>'
-								+ '	<td></td>';
+						if (loginId == 'admin') {
+							output += '<td></td>'
+									+ '<td id="deleteBtn_' + result[i].id + '"><button class="btn btn-outline-danger" type="button" onclick="commentDelete(' + result[i].id + ')">삭제</button></td>';
+						} else {
+							output += '	<td></td>'
+									+ '	<td></td>';
+						}
 					}
+					output += '	</tr>';
+					
 				}
-				output += '	</tr>';
-				
-			}
-			output += '</table>';
+				output += '</table>';
 			
-			commentList.innerHTML = output;
+				commentList.innerHTML = output;
 			}
 		});
 	}
 	
 	const commentCancel = (id) => {
 		document.getElementById("comment_" + id).innerHTML = rawComment;
+	}
+	
+	const goBack = () => {
+		location.href = "/board/" + ${categoryId} + "?page=" + ${page} + "&id=" + ${board.id};
 	}
 </script>
 </html>

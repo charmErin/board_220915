@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.its.board.dto.BoardDTO;
+import com.its.board.dto.SearchDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,6 +51,14 @@ public class BoardRepository {
 
 	public Long boardCount(int categoryId) {
 		return sql.selectOne("Board.count", categoryId);
+	}
+
+	public List<BoardDTO> searchList(SearchDTO searchDTO) {
+		return sql.selectList("Board.searchList", searchDTO);
+	}
+
+	public Long searchBoardCount(SearchDTO searchDTO) {
+		return sql.selectOne("Board.searchCount", searchDTO);
 	}
 
 	
