@@ -20,6 +20,7 @@
 	<div class="body-content">
 	<div class="container col-5 my-4">
 		<form action="/board/update" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="${board.id}">
 			<input type="hidden" name="page" value="${page}">
 			<select class="form-select mt-3 mb-3" aria-label="Default select example" name="categoryId">
 				<c:choose>
@@ -51,7 +52,7 @@
 			</select>
 			<input type="hidden" name="memberId" value="${board.memberId}">
 			<input class="form-control mb-3" type="text" name="boardTitle" value="${board.boardTitle}">
-			<input type="hidden" name="boardWriter" value="${board.memberName}">
+			<input type="hidden" name="boardWriter" value="${board.boardWriter}">
 			<textarea class="form-control mb-3" name="boardContents" rows="5">${board.boardContents}</textarea>
 <!-- 			<div class="mb-3"> -->
 <!-- 			  <label for="formFile" class="form-label">현재 파일</label> -->
@@ -62,7 +63,7 @@
 			  <label for="formFile" class="form-label">변경할 파일 첨부</label>
 			  <input class="form-control" type="file" name="boardFile" id="formFile">
 			</div>
-			<input class="btn btn-outline-info d-grid mx-auto" type="submit" value="글작성">
+			<input class="btn btn-outline-info d-grid mx-auto" type="submit" value="글수정">
 		</form>
 	</div>
 	</div>

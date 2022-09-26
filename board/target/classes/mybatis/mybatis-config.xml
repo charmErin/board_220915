@@ -7,5 +7,6 @@
         <typeAlias type="com.its.board.dto.BoardDTO" alias="board" />
         <typeAlias type="com.its.board.dto.CommentDTO" alias="comment" />
         <typeAlias type="com.its.board.dto.SearchDTO" alias="search" />
+        <typeAlias type="com.its.board.dto.FileTestDTO" alias="fileTest" />
     </typeAliases>
 </configuration>

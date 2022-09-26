@@ -43,18 +43,23 @@
 				<tr>
 					<td colspan="2">첨부파일자리</td>
 				</tr>
+				<c:if test="${board.boardFileName ne null}">
+					<tr>
+						<td colspan="2"><img src="${pageContext.request.contextPath}/upload/${board.boardFileName}" alt="" height="100" width="100"></td>
+					</tr>
+				</c:if>
 			</table>
 			
 			<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
 				<c:choose>
 					<c:when test="${sessionScope.id eq board.memberId}">
-						<button class="btn btn-warning me-md-2" type="button">수정</button>
-						<button class="btn btn-secondary" type="button">삭제</button>
+						<button class="btn btn-warning me-md-2" type="button" onclick="updateBoard2()">수정</button>
+						<button class="btn btn-secondary" type="button" onclick="deleteBoard2()">삭제</button>
 						<button class="btn btn-dark" type="button" onclick="goSearch()">검색목록</button>
 					</c:when>
 					<c:otherwise>
 						<c:if test="${sessionScope.loginId eq 'admin'}">
-							<button class="btn btn-secondary" type="button">삭제</button>
+							<button class="btn btn-secondary" type="button" onclick="deleteBoard2()">삭제</button>
 							<button class="btn btn-dark" type="button" onclick="goSearch()">검색목록</button>
 						</c:if>
 					</c:otherwise>
@@ -116,6 +121,16 @@
 	</div>
 </body>
 <script>
+	const updateBoard2 = () => {
+		location.href = "/board/search/update-form?searchType=" + '${searchType}' + "&q=" + '${q}' + "&page=" + ${page} + "&id=" + ${board.id};
+	}
+	
+	const deleteBoard2 = () => {
+		if (confirm("삭제하시겠습니까?")) {
+			location.href = "/board/delete/" + ${board.id};
+		}
+	}
+	
 	const commentSave = () => {
 		const boardId = '${board.id}';
 		const memberId = '${sessionScope.id}';

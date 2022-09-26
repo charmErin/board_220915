@@ -65,16 +65,17 @@
 					<select class="form-select col-1" name="searchType">
 						<option value="boardTitle">제목</option>
 						<option value="boardWriter">작성자</option>
-						<option value="boardContetns">내용</option>
+						<option value="boardContents">내용</option>
 					</select>
 					<input class="form-control" type="text" name="q" placeholder="검색" aria-label="Search">
 				</div>
 			</form>
 	    </div>
 		
-		
 		<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
-			<button onclick="boardSave()" class="btn btn-dark">글작성</button>
+			<c:if test="${sessionScope.id ne null}">
+				<button onclick="boardSave()" class="btn btn-dark">글작성</button>
+			</c:if>
 		</div>
 		
 		
@@ -91,8 +92,8 @@
 				<tr>
 					<td>${board.id}</td>
 					<td>
-						<a href="/board/detail/${categoryId}?page=${pageDTO.page}&id=${board.id}">${board.boardTitle}</a>
-						<c:if test="${board.boardFileName ne null}"><img src="#" alt=""/></c:if>
+						<a href="/board/detail/${categoryId}?page=${pageDTO.page}&id=${board.id}">${board.boardTitle}
+						<c:if test="${board.boardFileName ne null}"><img src="../../../resources/svg/image.svg" alt=""/></c:if></a>
 					</td>
 					<td>${board.boardWriter}</td>
 					<td>${board.boardHits}</td>
@@ -122,7 +123,7 @@
                 <c:choose>
                     <c:when test="${i eq pageDTO.page}">
                         <li class="page-item active">
-                            <a class="page-link">${i}</a>
+                            <a class="page-link text-white">${i}</a>
                         </li>
                     </c:when>
                     <c:otherwise>

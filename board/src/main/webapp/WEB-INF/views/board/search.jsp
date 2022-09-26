@@ -119,7 +119,7 @@
 		                <c:choose>
 		                    <c:when test="${i eq pageDTO.page}">
 		                        <li class="page-item active">
-		                            <a class="page-link">${i}</a>
+		                            <a class="page-link text-white">${i}</a>
 		                        </li>
 		                    </c:when>
 		                    <c:otherwise>

@@ -1,6 +1,7 @@
 package com.its.board.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.its.board.dto.BoardDTO;
 import com.its.board.dto.CommentDTO;
@@ -39,21 +41,12 @@ public class BoardController {
 	public String save(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
 		int result = boardService.save(boardDTO);
 		if (result > 0) {
-			return "redirect:/board/" + boardDTO.getCategoryId();
+			return "redirect:/board/detail/" + boardDTO.getCategoryId() + "?page=1&id=" + boardDTO.getId();
 		} else {
 			System.out.println("글 저장실패");
 			return "index";
 		}
 	}
-	
-	
-	// 글 목록
-//	@GetMapping("/{categoryId}")
-//	public String findAll(@PathVariable int categoryId, Model model) {
-//		model.addAttribute("boardList", boardService.findAll(categoryId));
-//		model.addAttribute("category", categoryId);
-//		return "board/list";
-//	}
 	
 	
 	// 글 페이징 목록
@@ -100,7 +93,7 @@ public class BoardController {
 	
 	// 글 수정 처리
 	@PostMapping("/update")
-	public String update(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
+	public String update(@ModelAttribute BoardDTO boardDTO, @RequestParam int page) throws IllegalStateException, IOException {
 		boardService.update(boardDTO);
 		return "redirect:/board/detail/" + boardDTO.getCategoryId() + "?page=" + page + "&id=" + boardDTO.getId();
 	}
@@ -140,7 +133,7 @@ public class BoardController {
 	}
 	
 	
-	// 글 검색 상세 페이지
+	// 검색글 상세 페이지
 	@GetMapping("/search-detail")
 	public String searchDetail(@RequestParam(value="page", required=false, defaultValue="1") int page,
 							@RequestParam String searchType,
@@ -159,10 +152,27 @@ public class BoardController {
 	}
 
 	
-	// 글 검색 상세페이지 수정 요청
+	// 검색글 상세페이지 수정 요청
 	@GetMapping("/search/update-form")
-	public String searchUpdateForm() {
-		
+	public String searchUpdateForm(@RequestParam String searchType, @RequestParam String q,
+								@RequestParam(value="page", required=false, defaultValue="1") int page,
+								@RequestParam Long id, Model model) {
+		BoardDTO boardDTO = boardService.findById(id);
+		model.addAttribute("board", boardDTO);
+		model.addAttribute("page", page);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("q", q);
+		return "board/searchUpdate";
 	}
+	
+	// 검색글 수정 처리
+	@PostMapping("/search/update")
+	public String searchUpdate(@RequestParam String searchType, @RequestParam String q,
+							@ModelAttribute BoardDTO boardDTO, @RequestParam int page) throws IllegalStateException, IOException {
+		String encodedParam = URLEncoder.encode(q, "UTF-8");
+		boardService.update(boardDTO);
+		return "redirect:/board/search-detail?searchType=" + searchType + "&q=" + encodedParam + "&page=" + page + "&id=" + boardDTO.getId();
+	}
+	
 	
 }

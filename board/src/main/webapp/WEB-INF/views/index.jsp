@@ -23,6 +23,9 @@
 		<div>
 			index.jsp
 		</div>
+		
+		<a href="/file-test/save-form">파일 저장</a><br>
+		<a href="/file-test/findAll">파일 불러오기</a><br>
 	</div>
 </body>
 </html>

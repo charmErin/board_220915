@@ -43,6 +43,11 @@
 				<tr>
 					<td colspan="2">첨부파일자리</td>
 				</tr>
+				<c:if test="${board.boardFileName ne null}">
+					<tr>
+						<td colspan="2"><img src="${pageContext.request.contextPath}/upload/${board.boardFileName}" alt="" height="100" width="100"></td>
+					</tr>
+				</c:if>
 			</table>
 			
 			<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
