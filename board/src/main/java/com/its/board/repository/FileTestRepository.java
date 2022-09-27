@@ -1,6 +1,7 @@
 package com.its.board.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,14 @@ public class FileTestRepository {
 
 	public List<FileTestDTO> findAll() {
 		return sql.selectList("FileTest.findAll");
+	}
+
+	public FileTestDTO findById(Long id) {
+		return sql.selectOne("FileTest.findById", id);
+	}
+
+	public void save2(Map<String, Object> paramMap) {
+		sql.insert("FileTest.save2", paramMap);
 	}
 	
 	

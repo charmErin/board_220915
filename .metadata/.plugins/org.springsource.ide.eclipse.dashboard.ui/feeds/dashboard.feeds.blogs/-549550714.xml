@@ -5,7 +5,65 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2022-09-23T07:00:00Z</updated>
+  <updated>2022-09-26T11:33:00Z</updated>
+  <entry>
+    <title>Native Support in Spring Boot 3.0.0-M5</title>
+    <link rel="alternate" href="https://spring.io/blog/2022/09/26/native-support-in-spring-boot-3-0-0-m5" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>St?phane Nicoll</name>
+    </author>
+    <id>tag:spring.io,2022-09-23:4928</id>
+    <updated>2022-09-26T11:33:00Z</updated>
+    <content type="html">&lt;p&gt;The Spring Team has been working on native image support for Spring Applications for quite some time. After 3+ years of incubation in the &lt;a href="https://github.com/spring-projects-experimental/spring-native"&gt;Spring Native&lt;/a&gt; experimental project with Spring Boot 2, native support is moving to General Availability with Spring Framework 6 and Spring Boot 3!&lt;/p&gt;
+&lt;p&gt;Native images provide almost instant startup time and reduced memory consumption for Java applications. The recent Spring Boot &lt;code&gt;3.0.0-M5&lt;/code&gt; release marks the first time we¡¯re asking for broader community feedback on our native story. If you need to catch-up on the basics, please refer to the &lt;a href="https://spring.io/blog/2022/03/22/initial-aot-support-in-spring-framework-6-0-0-m3"&gt;Ahead Of Time basics blog post&lt;/a&gt; from late March. You can also learn &lt;a href="https://spring.io/blog/2022/05/24/preparing-for-spring-boot-3-0"&gt;how to prepare your applications for Spring Boot 3.0&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A lot has happened since March! We¡¯ve improved compatibility with a larger number of use cases and libraries, fixing and improving our native support in the process. This blog post details what you need to know to get started.&lt;/p&gt;&lt;h1&gt;&lt;a href="#building-your-first-native-image" class="anchor" name="building-your-first-native-image"&gt;&lt;/a&gt;Building Your First Native Image&lt;/h1&gt;
+&lt;p&gt;The easiest way to get started is to create a new project from &lt;a href="https://start.spring.io"&gt;https://start.spring.io&lt;/a&gt;. Make sure to select Spring Boot 3.0.0-M5 (or later) and your favorite build tool. Once you¡¯ve done that, one way to build a native image is by using the &lt;a href="https://graalvm.github.io/native-build-tools/latest/index.html"&gt;Native Build Tools plugin&lt;/a&gt; and a local GraalVM installation.&lt;/p&gt;
+&lt;p&gt;Follow the &lt;a href="https://www.graalvm.org/java/quickstart/"&gt;instructions to install GraalVM&lt;/a&gt;, or invoke the following if you have SDKMan! installed:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ sdk install java 22.2.r17-nik
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can check that things are working as expected by making sure &lt;code&gt;native-image&lt;/code&gt; is on your path. Spring Boot has specific integrations for Maven and Gradle. If you¡¯re using Maven, enabling the native profile triggers the necessary infrastructure to build the native image:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ ./mvnw -Pnative package
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For Gradle, our plugin reacts to the presence of the Native Build Tools plugin so we need to apply it:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;plugins {&#xD;
+  ..&#xD;
+  id &amp;#39;org.graalvm.buildtools.native&amp;#39; version &amp;#39;0.9.14&amp;#39;&#xD;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once that¡¯s done, this triggers the necessary infrastructure to build the native image:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ ./gradlew nativeCompile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This generates a native binary for your local OS/CPU located in &lt;code&gt;target/&lt;/code&gt; and &lt;code&gt;build/native/nativeCompile&lt;/code&gt; respectively. You can start your app like with any other binary. For instance with Maven:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ target/demo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src="https://static.spring.io/blog/snicoll/20220923/native-image-spring-boot-3.0.0-M5.png" /&gt;&lt;/p&gt;&lt;h1&gt;&lt;a href="#optimizing-applications-at-build-time" class="anchor" name="optimizing-applications-at-build-time"&gt;&lt;/a&gt;Optimizing Applications at Build-Time&lt;/h1&gt;
+&lt;p&gt;In 3.0, our build plugins have an additional goal that triggers ahead-of-time processing of the application. During that phase, the application is inspected and some of the decisions we usually take at runtime are evaluated and recorded.&lt;/p&gt;
+&lt;p&gt;While Spring Boot ships with a wide number of auto-configurations, these are ¡°dormant¡± until at least a classpath condition matches. When building a native image, such evaluation has to happen before the image is built, otherwise all the combinations will be included in it.&lt;/p&gt;
+&lt;p&gt;We also need to detect the use cases that GraalVM won¡¯t be able to infer, such as proxying, the use of reflection and serialization, and resource loading. The result of this detection forms what is called reachability metadata. The whole Spring portfolio has been updated to detect such use cases and generate the relevant metadata automatically.&lt;/p&gt;
+&lt;p&gt;We¡¯ve made the decision to generate source code with Javadoc and an easy-to-browse structure. This allows the code generated at build-time to be inspected and easily debugged if necessary. It also means that we only feed regular compiled Java to &lt;code&gt;native-image&lt;/code&gt; as a result.&lt;/p&gt;&lt;h1&gt;&lt;a href="#reachability-metadata-repository" class="anchor" name="reachability-metadata-repository"&gt;&lt;/a&gt;Reachability Metadata Repository&lt;/h1&gt;
+&lt;p&gt;While the preferred option for native compatibility is that each library ships the extra reachability metadata hints that they need, this is not always possible. Recently, Oracle Labs announced a shared repository for &lt;a href="https://medium.com/graalvm/enhancing-3rd-party-library-support-in-graalvm-native-image-with-shared-metadata-9eeae1651da4"&gt;third-party reachability metadata&lt;/a&gt;. This repository is open for contributions to gather reachability metadata for the entire JVM ecosystem. Each entry is tested in isolation against a range of versions.&lt;/p&gt;
+&lt;p&gt;If your favorite library does not provide the necessary metadata, consider contributing to this repository. The Spring Team is actively contributing based on the third-party library integration that we provide.&lt;/p&gt;&lt;h1&gt;&lt;a href="#testing-support" class="anchor" name="testing-support"&gt;&lt;/a&gt;Testing Support&lt;/h1&gt;
+&lt;p&gt;Our support for native images is about optimizing the application based on its dependencies and configuration, and inferring the need for reflection, proxying, and so on. This may miss something that is specific to your application such as its use of custom libraries or frameworks. To help you with that, this milestone also provides an easy way to run your existing tests in a native image, allowing you to verify that your application and its dependency work as expected.&lt;/p&gt;
+&lt;p&gt;To run your test suite in a native environment, we rely on the testing support of the Native Build Tools plugin. First, make sure that &lt;code&gt;native-image&lt;/code&gt; is available in your path (see above for setup instructions).&lt;/p&gt;
+&lt;p&gt;With Maven, this can be invoked as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ ./mvnw -PnativeTest test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;With Gradle, the command is as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class="prettyprint"&gt;$ ./gradlew nativeTest
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For tests that are using an ApplicationContext, this applies the same process of optimizing it and inferring the necessary reachability metadata.&lt;/p&gt;&lt;h1&gt;&lt;a href="#your-application-does-not-work-now-what" class="anchor" name="your-application-does-not-work-now-what"&gt;&lt;/a&gt;Your Application Does Not Work: Now What?&lt;/h1&gt;
+&lt;p&gt;If your application does not work as a native image, we¡¯d love to hear about it and improve our support before the release candidate, scheduled in late October. Support varies depending on the error:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Build failure during the ahead-of-time optimization phase, please report to the &lt;a href="https://github.com/spring-projects/spring-framework/issues"&gt;Spring Framework issue tracker&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Build failure during the generation of the native image can have various root causes. Please use the usual support channel such as Gitter or StackOverflow&lt;/li&gt;
+  &lt;li&gt;If the application builds successfully but fails to start, it is likely that some reachability metadata is missing. The need for it can come from your own code, or from a third-party library.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Spring Framework 6 ships with a new API that lets you record hints programmatically. If the missing hint is from your own code, consider implementing &lt;a href="https://docs.spring.io/spring-framework/docs/6.0.0-M6/javadoc-api/org/springframework/aot/hint/RuntimeHintsRegistrar.html"&gt;&lt;code&gt;RuntimeHintsRegistrar&lt;/code&gt;&lt;/a&gt;. See this &lt;a href="https://github.com/snicoll/demo-aot-native"&gt;sample application&lt;/a&gt; for a concrete example.&lt;/p&gt;&lt;h1&gt;&lt;a href="#next-steps" class="anchor" name="next-steps"&gt;&lt;/a&gt;Next Steps&lt;/h1&gt;
+&lt;p&gt;Based on the community feedback, we will continue to improve our AOT engine and update the reference guide to provide more details about the new APIs we¡¯ve introduced. We intend to go GA in November this year.&lt;/p&gt;
+&lt;p&gt;This is an exciting time for us. We would like to thank again everyone who has contributed and reported feedback already, and we are looking forward to further feedback coming!&lt;/p&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
   <entry>
     <title>My SpringOne 2022</title>
     <link rel="alternate" href="https://spring.io/blog/2022/09/23/my-springone-2022" />
@@ -683,81 +741,6 @@ Artem&lt;/p&gt;
 &lt;p&gt;Detailed changes can be found here: &lt;a href="https://github.com/spring-projects/sts4/wiki/Changelog#2022-09-16-4160-release-incl-language-servers-version-1390"&gt;https://github.com/spring-projects/sts4/wiki/Changelog#2022-09-16-4160-release-incl-language-servers-version-1390&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Spring Tools 4.16.1 is scheduled to be released in late October 2022.&lt;/p&gt;
 &lt;p&gt;Enjoy!&lt;/p&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Cloud Sleuth OpenTelemetry (OTel) 1.1.0 Has Been Released</title>
-    <link rel="alternate" href="https://spring.io/blog/2022/09/16/spring-cloud-sleuth-opentelemetry-otel-1-1-0-has-been-released" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Marcin Grzejszczak</name>
-    </author>
-    <id>tag:spring.io,2022-09-16:4909</id>
-    <updated>2022-09-16T07:00:00Z</updated>
-    <content type="html">&lt;p&gt;On behalf of the community, I am pleased to announce that the first General Availability (RELEASE) of the &lt;a href="https://github.com/spring-cloud-incubator/spring-cloud-sleuth-otel/"&gt;Spring Cloud Sletuh OTel 1.1.0&lt;/a&gt; project is available today. The release can be found in &lt;a href="https://repo1.maven.org/maven2/org/springframework/cloud/spring-cloud-sleuth-otel-dependencies/1.1.0/"&gt;Maven Central&lt;/a&gt;. You can check out the &lt;a href="https://spring-projects-experimental.github.io/spring-cloud-sleuth-otel/docs/1.1.0/reference/html/index.html"&gt;reference documentation for more information&lt;/a&gt;.&lt;/p&gt;&lt;h2&gt;&lt;a href="#what-is-this" class="anchor" name="what-is-this"&gt;&lt;/a&gt;What is this?&lt;/h2&gt;
-&lt;p&gt;Spring Cloud Sleuth OTel is an extension project to &lt;a href="https://projects.spring.io/spring-cloud-sleuth/"&gt;Spring Cloud Sleuth&lt;/a&gt; that comes with an &lt;a href="https://opentelemetry.io"&gt;OpenTelemetry&lt;/a&gt; tracer.&lt;/p&gt;
-&lt;p&gt;As always, we welcome feedback on &lt;a href="https://github.com/spring-projects-experimental/spring-cloud-sleuth-otel/"&gt;GitHub&lt;/a&gt;, on &lt;a href="https://gitter.im/spring-cloud/spring-cloud"&gt;Gitter&lt;/a&gt;, on &lt;a href="https://stackoverflow.com/questions/tagged/spring-cloud-sleuth"&gt;Stack Overflow&lt;/a&gt;, or on &lt;a href="https://twitter.com/SpringCloud"&gt;Twitter&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;To get started with Maven with a BOM (dependency management only):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint"&gt;&lt;br/&gt;&amp;lt;dependencyManagement&amp;gt;&#xD;
-    &amp;lt;dependencies&amp;gt;&#xD;
-        &amp;lt;dependency&amp;gt;&#xD;
-            &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
-            &amp;lt;artifactId&amp;gt;spring-cloud-dependencies&amp;lt;/artifactId&amp;gt;&#xD;
-            &amp;lt;version&amp;gt;2021.0.4&amp;lt;/version&amp;gt;&#xD;
-            &amp;lt;type&amp;gt;pom&amp;lt;/type&amp;gt;&#xD;
-            &amp;lt;scope&amp;gt;import&amp;lt;/scope&amp;gt;&#xD;
-        &amp;lt;/dependency&amp;gt;&#xD;
-        &amp;lt;dependency&amp;gt;&#xD;
-            &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
-            &amp;lt;artifactId&amp;gt;spring-cloud-sleuth-otel-dependencies&amp;lt;/artifactId&amp;gt;&#xD;
-            &amp;lt;version&amp;gt;1.1.0&amp;lt;/version&amp;gt;&#xD;
-            &amp;lt;scope&amp;gt;import&amp;lt;/scope&amp;gt;&#xD;
-            &amp;lt;type&amp;gt;pom&amp;lt;/type&amp;gt;&#xD;
-        &amp;lt;/dependency&amp;gt;&#xD;
-    &amp;lt;/dependencies&amp;gt;&#xD;
-&amp;lt;/dependencyManagement&amp;gt;&#xD;
-&amp;lt;dependencies&amp;gt;&#xD;
-    &amp;lt;dependency&amp;gt;&#xD;
-        &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
-        &amp;lt;artifactId&amp;gt;spring-cloud-starter-sleuth&amp;lt;/artifactId&amp;gt;&#xD;
-        &amp;lt;exclusions&amp;gt;&#xD;
-            &amp;lt;exclusion&amp;gt;&#xD;
-                &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
-                &amp;lt;artifactId&amp;gt;spring-cloud-sleuth-brave&amp;lt;/artifactId&amp;gt; &amp;lt;!-- We want to exclude the default tracer coming from Sleuth... --&amp;gt;&#xD;
-            &amp;lt;/exclusion&amp;gt;&#xD;
-        &amp;lt;/exclusions&amp;gt;&#xD;
-    &amp;lt;/dependency&amp;gt;&#xD;
-    &amp;lt;dependency&amp;gt;&#xD;
-        &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt;&#xD;
-        &amp;lt;artifactId&amp;gt;spring-cloud-sleuth-otel-autoconfigure&amp;lt;/artifactId&amp;gt;  &amp;lt;!-- ... and we want to include the one coming from Spring Cloud Sleuth OTel --&amp;gt;&#xD;
-    &amp;lt;/dependency&amp;gt;&#xD;
-&amp;lt;/dependencies&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;or with Gradle:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint"&gt;buildscript {&#xD;
-dependencies {&#xD;
-classpath &amp;quot;io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE&amp;quot;&#xD;
-}&#xD;
-}&#xD;
-&#xD;
-&#xD;
-&#xD;
-apply plugin: &amp;quot;io.spring.dependency-management&amp;quot;&#xD;
-&#xD;
-dependencyManagement {&#xD;
-imports {&#xD;
-mavenBom &amp;#39;org.springframework.cloud:spring-cloud-dependencies:2021.0.4&amp;#39;&#xD;
-mavenBom &amp;#39;org.springframework.cloud:spring-cloud-sleuth-otel-dependencies:1.1.0&amp;#39;&#xD;
-}&#xD;
-}&#xD;
-&#xD;
-dependencies {&#xD;
-implementation(&amp;#39;org.springframework.cloud:spring-cloud-starter-sleuth&amp;#39;) {&#xD;
-    exclude group: &amp;#39;org.springframework.cloud&amp;#39;, module: &amp;#39;spring-cloud-sleuth-brave&amp;#39; //  We want to exclude the default tracer coming from Sleuth...&#xD;
-}&#xD;
-implementation &amp;#39;org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure&amp;#39; // ... and we want to include the one coming from Spring Cloud Sleuth OTel&#xD;
-}
-&lt;/code&gt;&lt;/pre&gt;
 &lt;!-- rendered by Sagan Renderer Service --&gt;</content>
   </entry>
 </feed>

@@ -1,6 +1,7 @@
 package com.its.board.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,4 +19,6 @@ public class BoardDTO {
 	private int boardHits;
 	private MultipartFile boardFile;
 	private String boardFileName;
+	
+	private List<FileDTO> fileDTOList;
 }

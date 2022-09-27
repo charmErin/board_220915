@@ -37,6 +37,17 @@ public class BoardController {
 	
 	
 	// 글 저장 처리
+//	@PostMapping("/save")
+//	public String save(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
+//		int result = boardService.save(boardDTO);
+//		if (result > 0) {
+//			return "redirect:/board/detail/" + boardDTO.getCategoryId() + "?page=1&id=" + boardDTO.getId();
+//		} else {
+//			System.out.println("글 저장실패");
+//			return "index";
+//		}
+//	}
+	
 	@PostMapping("/save")
 	public String save(@ModelAttribute BoardDTO boardDTO) throws IllegalStateException, IOException {
 		int result = boardService.save(boardDTO);

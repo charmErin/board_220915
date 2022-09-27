@@ -6,12 +6,18 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="boardCont" key="selection"/>
+		<item value="MediaType" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="MediaType"/>
+			<item value="fileName"/>
+			<item value="file_etc"/>
+			<item value="var"/>
+			<item value="b64toBlob"/>
+			<item value="getfileToBlob"/>
 			<item value="boardCont"/>
 			<item value="goSearch"/>
 			<item value="innerHTML"/>
@@ -21,14 +27,9 @@
 			<item value="paging"/>
 			<item value="last-child"/>
 			<item value="rawComment"/>
-			<item value="S"/>
-			<item value="commentUpdate"/>
-			<item value="appSer"/>
-			<item value="file"/>
-			<item value="Upload"/>
-			<item value="Upliad"/>
 		</list>
 		<list key="replacehistory">
+			<item value="let"/>
 			<item value="pageDTO"/>
 		</list>
 	</section>

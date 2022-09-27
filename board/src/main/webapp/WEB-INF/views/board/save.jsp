@@ -34,7 +34,7 @@
 			<input class="form-control mb-3" type="text" name="boardTitle" placeholder="제목">
 			<input type="hidden" name="boardWriter" value="${sessionScope.memberName}">
 			<textarea class="form-control mb-3" name="boardContents" rows="5" placeholder="내용"></textarea>
-			<input class="form-control mb-3" type="file" name="boardFile">
+			<input class="form-control mb-3" type="file" name="boardFile" multiple>
 			<input class="btn btn-outline-dark d-grid mx-auto" type="submit" value="글작성">
 		</form>
 	</div>
