@@ -19,6 +19,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -113,9 +114,10 @@ public class FileTestController {
 		String fileName = fileTestDTO.getFileName();
 		byte[] bytes = fileTestDTO.getBlobFile();
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-		FileOutputStream fos = new FileOutputStream("D:\\files\\" + fileName);
+		OutputStream os = response.getOutputStream();
 		
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
+		response.setContentType("application/octer-stream");
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Pragma", "no-cache;");
 		response.setHeader("Expires", "-1;");
@@ -126,12 +128,40 @@ public class FileTestController {
 			if (x == -1) {
 				break;
 			}
-			fos.write(buffer, 0, x);
+			os.write(buffer, 0, x);
 		}
-		fos.close();
+		os.close();
 		bis.close();
 	}
 	
+	
+//	@PostMapping("/save3")
+//	public String save3(MultipartFile[] blobFile, Model model) throws IOException {
+//		for (MultipartFile m: blobFile) {
+//			String fileName = m.getOriginalFilename();
+//			File f = new File("D:\\image", fileName);
+//			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//			FileInputStream fis = new FileInputStream(m);
+//			
+//			while (true) {
+//				int x = fis.read();
+//				if (x == -1) break;
+//				bos.write(x);
+//			}
+//			fis.close();
+//			bos.close();
+//			
+//			byte[] bis = bos.toByteArray();
+//			
+//			FileTestDTO fileTestDTO = new FileTestDTO();
+//			fileTestDTO.setBlobFile(bis);
+//			fileTestDTO.setFileName(fileName);
+//			fileTestDTO.setFileSize(m.getSize());
+//			
+//			fileTestService.save(fileTestDTO);
+//		}
+//		return "redirect:/file-test/findAll";
+//	}
 	
 	
 	@GetMapping("/download/{id}")
@@ -152,6 +182,7 @@ public class FileTestController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileTestDTO.getFileName() + "")
                 .body(resource);
 	}
+	
 	
 	@GetMapping("/findAll")
 	public String findAll(Model model) throws IOException {

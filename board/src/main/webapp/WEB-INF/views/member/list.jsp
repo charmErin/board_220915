@@ -52,11 +52,11 @@
 				<th></th>
 			</tr>
 			<c:forEach var="member" items="${memberList}">
-				<tr onclick="detailMember('${member.id}')">
-					<td>${member.id}</td>
-					<td>${member.loginId}</td>
-					<td>${member.memberName}</td>
-					<td>${member.memberMobile}</td>
+				<tr>
+					<td onclick="detailMember('${member.id}')">${member.id}</td>
+					<td onclick="detailMember('${member.id}')">${member.loginId}</td>
+					<td onclick="detailMember('${member.id}')">${member.memberName}</td>
+					<td onclick="detailMember('${member.id}')">${member.memberMobile}</td>
 					<c:choose>
 						<c:when test="${member.loginId ne 'admin'}">
 							<td><button class="btn btn-danger" onclick="deleteMember('${member.id}')">삭제</button></td>

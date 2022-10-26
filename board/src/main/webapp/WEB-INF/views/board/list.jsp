@@ -92,8 +92,10 @@
 				<tr>
 					<td>${board.id}</td>
 					<td>
-						<a href="/board/detail/${categoryId}?page=${pageDTO.page}&id=${board.id}">${board.boardTitle}
-						<c:if test="${board.boardFileName ne null}"><img src="../../../resources/svg/image.svg" alt=""/></c:if></a>
+						<a href="/board/detail/${categoryId}?page=${pageDTO.page}&id=${board.id}">
+								${board.boardTitle}
+<%-- 							<c:if test="${!board.boardFileList.isEmpty()}"><img src="../../../resources/svg/image.svg" alt=""/></c:if> --%>
+						</a>
 					</td>
 					<td>${board.boardWriter}</td>
 					<td>${board.boardHits}</td>

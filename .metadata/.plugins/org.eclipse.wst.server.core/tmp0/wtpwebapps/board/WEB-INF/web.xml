@@ -25,7 +25,7 @@
 		<load-on-startup>1</load-on-startup>
 		
 		<multipart-config>
-			<location>D:\\upload</location>
+			<location></location>
 			<max-file-size>20971520</max-file-size>	<!-- 1MB * 20 -->
 			<max-request-size>4194340</max-request-size>	<!-- 40MB -->
 			<file-size-threshold>20971520</file-size-threshold>	<!-- 20MB 메모리사용 -->
@@ -38,16 +38,16 @@
 	</servlet-mapping>
 
 	<filter>
-	        <filter-name>encodingFilter</filter-name>
-	        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-	        <init-param>
-	            <param-name>encoding</param-name>
-	            <param-value>UTF-8</param-value>
-	        </init-param>
-	    </filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
 	
-	    <filter-mapping>
-	        <filter-name>encodingFilter</filter-name>
-	        <url-pattern>/*</url-pattern>
-	    </filter-mapping>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

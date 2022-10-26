@@ -40,14 +40,22 @@
 					<td colspan="2"><textarea class="form-control-plaintext"
 							rows="5" readonly>${board.boardContents}</textarea></td>
 				</tr>
-				<tr>
-					<td colspan="2">첨부파일자리</td>
-				</tr>
-				<c:if test="${board.boardFileName ne null}">
+				<c:if test="${!board.boardFileList.isEmpty()}">
 					<tr>
-						<td colspan="2"><img src="${pageContext.request.contextPath}/upload/${board.boardFileName}" alt="" height="100" width="100"></td>
+						<td colspan="2">
+								첨부파일<br>
+								<c:forEach var="fileList" items="${board.boardFileList}">
+									${fileList.boardFileName}
+									<button class="btn btn-sm btn-outline-dark" onclick="downloadFile('${fileList.id}','${fileList.boardFileName}')">다운로드</button><br>
+								</c:forEach>
+						</td>
 					</tr>
 				</c:if>
+<%-- 				<c:if test="${board.boardFileName ne null}"> --%>
+<!-- 					<tr> -->
+<%-- 						<td colspan="2"><img src="${pageContext.request.contextPath}/upload/${board.boardFileName}" alt="" height="100" width="100"></td> --%>
+<!-- 					</tr> -->
+<%-- 				</c:if> --%>
 			</table>
 			
 			<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
@@ -129,6 +137,28 @@
 		if (confirm("삭제하시겠습니까?")) {
 			location.href = "/board/delete/" + ${board.id};
 		}
+	}
+	
+	const downloadFile = (id, fileName) => {
+		var xhr = new XMLHttpRequest();
+		
+		$.ajax({
+			type: "get",
+			url: "/board/download/" + id,
+			cache: false,
+			xhrFields: {  //response 데이터를 바이너리로 처리한다.
+				responseType: 'blob'
+			},
+			success: function(result) {
+				console.log("완료");
+				var blob = new Blob([result]);
+
+				var link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = fileName;
+				link.click();
+			}
+		});
 	}
 
 

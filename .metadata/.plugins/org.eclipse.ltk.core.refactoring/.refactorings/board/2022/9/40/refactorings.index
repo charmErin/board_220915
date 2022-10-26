@@ -4,3 +4,5 @@
 1664173780775	Rename resource 'memberMapper.xml'
 1664176209393	Rename resource 'findAll.jsp'
 1664176220351	Rename resource 'detail.jsp'
+1664340446169	Rename type 'FileDTO'
+1664340463892	Rename compilation unit 'FilesDTO.java'

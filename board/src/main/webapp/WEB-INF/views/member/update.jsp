@@ -22,7 +22,7 @@
 <body>
 	<%@include file ="../layout/header.jsp" %>
 	<div class="body-content">
-	<div class="container col-3">
+	<div class="container col-4">
 		<h2>회원 정보 수정</h2>
 		<form action="/member/update" method="post" name="updateForm">
 			<input type="hidden" name="id" value="${member.id}">

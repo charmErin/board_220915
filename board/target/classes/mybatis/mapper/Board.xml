@@ -5,8 +5,8 @@
 
 <mapper namespace="Board">
 	<insert id="save" parameterType="board">
-		insert into board_table(categoryId, memberId, boardTitle, boardWriter, boardContents, boardFileName)
-			values(#{categoryId}, #{memberId}, #{boardTitle}, #{boardWriter}, #{boardContents}, #{boardFileName})
+		insert into board_table(categoryId, memberId, boardTitle, boardWriter, boardContents)
+			values(#{categoryId}, #{memberId}, #{boardTitle}, #{boardWriter}, #{boardContents})
 		<selectKey resultType="Long" keyProperty="id" order="AFTER">
             select last_insert_id()
         </selectKey>
@@ -25,7 +25,7 @@
 	</select>
 	
 	<update id="update" parameterType="board">
-		update board_table set boardTitle=#{boardTitle}, boardContents=#{boardContents}, boardFileName=#{boardFileName}
+		update board_table set boardTitle=#{boardTitle}, boardContents=#{boardContents}
 			where id=#{id}
 	</update>
 	

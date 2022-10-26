@@ -88,8 +88,10 @@
 					<tr>
 						<td>${board.id}</td>
 						<td>
-							<a href="/board/search-detail?page=${pageDTO.page}&searchType=${searchType}&q=${q}&id=${board.id}">${board.boardTitle}</a>
-							<c:if test="${board.boardFileName ne null}"><img src="#" alt=""/></c:if>
+							<a href="/board/search-detail?page=${pageDTO.page}&searchType=${searchType}&q=${q}&id=${board.id}">
+								${board.boardTitle}
+<%-- 							<c:if test="${board.boardFileName ne null}"><img src="#" alt=""/></c:if> --%>
+							</a>
 						</td>
 						<td>${board.boardWriter}</td>
 						<td>${board.boardHits}</td>

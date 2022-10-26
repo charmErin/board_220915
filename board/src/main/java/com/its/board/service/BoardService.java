@@ -1,13 +1,11 @@
 package com.its.board.service;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.its.board.dto.BoardDTO;
 import com.its.board.dto.PageDTO;
@@ -21,16 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 	private final BoardRepository boardRepository;
 
-	public int save(BoardDTO boardDTO) throws IllegalStateException, IOException {
-		MultipartFile boardFile = boardDTO.getBoardFile();
-
-		if (!boardFile.isEmpty()) {
-			String boardFileName = boardFile.getOriginalFilename();
-			boardFileName = System.currentTimeMillis() + "_" + boardFileName;
-			String savePath = "D:\\upload\\" + boardFileName;
-			boardFile.transferTo(new File(savePath));
-			boardDTO.setBoardFileName(boardFileName);
-		}
+	public int save(BoardDTO boardDTO) {
 		return boardRepository.save(boardDTO);
 	}
 
@@ -46,16 +35,7 @@ public class BoardService {
 		return boardRepository.detail(id);
 	}
 
-	public void update(BoardDTO boardDTO) throws IllegalStateException, IOException {
-		MultipartFile boardFile = boardDTO.getBoardFile();
-
-		if (!boardFile.isEmpty()) {
-			String boardFileName = boardFile.getOriginalFilename();
-			boardFileName = System.currentTimeMillis() + "_" + boardFileName;
-			String savePath = "D:\\upload\\" + boardFileName;
-			boardFile.transferTo(new File(savePath));
-			boardDTO.setBoardFileName(boardFileName);
-		}
+	public void update(BoardDTO boardDTO) {
 		boardRepository.update(boardDTO);
 	}
 

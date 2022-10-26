@@ -61,9 +61,22 @@
 <%-- 			  <input class="form-control" type="file" name="boardFileName" value="${board.boardFileName}"> --%>
 <!-- 			</div> -->
 <!-- 			<input type="button" onclick="fileDelete()" value="이전 첨부파일 삭제"> -->
-			<div class="mb-3">
-			  <label for="formFile" class="form-label">변경할 파일 첨부</label>
-			  <input class="form-control" type="file" name="boardFile" id="formFile">
+<!-- 			<div class="mb-3"> -->
+<!-- 			  <label for="formFile" class="form-label">변경할 파일 첨부</label> -->
+<!-- 			  <input class="form-control" type="file" name="boardFile"> -->
+<!-- 			</div> -->
+			
+			<div id="file-list">
+				<c:if test="${!board.boardFileList.isEmpty()}">
+					<c:forEach var="fileList" items="${board.boardFileList}">
+						${fileList.boardFileName}
+						<button type="button" class="btn btn-sm btn-outline-dark" onclick="fileDelete('${fileList.id}', '${board.id}')">파일 삭제</button><br>
+					</c:forEach>
+				</c:if>
+			</div>
+			<div id="new-file">
+				새로운 파일 첨부
+				<input class="form-control" type="file" name="boardFile" multiple>
 			</div>
 			<input class="btn btn-outline-info d-grid mx-auto" type="submit" value="글수정">
 		</form>

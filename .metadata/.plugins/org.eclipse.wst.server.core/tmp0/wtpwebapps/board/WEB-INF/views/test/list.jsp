@@ -11,18 +11,30 @@
 <body>
 	<c:forEach var="file" items="${fileList}">
 		${file.fileName}<br>
-		<button onclick="download('${file.id}')">다운로드</button><br>
+		<button onclick="download('${file.id}','${file.fileName}')">다운로드</button><br>
 	</c:forEach>
 	
 	
 </body>
 <script>
-	const download = (id) => {
+	const download = (id, fileName) => {
+		var xhr = new XMLHttpRequest();
+		
 		$.ajax({
 			type: "get",
 			url: "/file-test/download3/" + id,
+			cache: false,
+			xhrFields: {  //response 데이터를 바이너리로 처리한다.
+				responseType: 'blob'
+			},
 			success: function(result) {
-				alert("다운로드 성공");
+				console.log("완료");
+				var blob = new Blob([result]);
+
+				var link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = fileName;
+				link.click();
 			}
 		});
 
